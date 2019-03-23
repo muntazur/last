@@ -18,15 +18,13 @@ class CreateProductsTable extends Migration
             $table->increments('pid');
             $table->string('name');
 
-            $table->integer('user_id')->unsigned();
 
             $table->string('category');
             $table->string('brand');
             
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             
-            $table->foreign('category')->references('name')->on('categories')->onDelete('cascade');
-            $table->foreign('brand')->references('name')->on('brands')->onDelete('cascade');
+            $table->foreign('category')->references('name')->on('categories')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('brand')->references('name')->on('brands')->onDelete('cascade')->onUpdate('cascade');
 
 
             $table->double('price');

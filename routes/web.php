@@ -23,3 +23,15 @@ Route::get('manage_category','InventoryController@manageCategory');
 Route::post('save_product','InventoryController@saveProduct');
 Route::get('manage_product','InventoryController@manageProduct');
 Route::get('get_order','InventoryController@getOrder');
+Route::post('get_single_product','InventoryController@getSingleProduct');
+Route::post('save_order','InventoryController@saveOrder');
+
+
+Route::post('update_brand','InventoryController@updateBrand');
+Route::post('delete_brand','InventoryController@deleteBrand');
+
+
+Route::post('update_category','InventoryController@updateCategory');
+Route::post('delete_category','InventoryController@deleteCategory');
+
+Route::get('print','InventoryController@printInvoice');

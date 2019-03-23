@@ -161,6 +161,8 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        //Codedge\Fpdf\FpdfServiceProvider::class,
+        Anouar\Fpdf\FpdfServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -225,6 +227,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        //'Fpdf' => Codedge\Fpdf\Facades\Fpdf::class,
+        'Fpdf' => Anouar\Fpdf\Facades\Fpdf::class,
 
     ],
 

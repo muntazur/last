@@ -33,8 +33,8 @@
                 <h5>Login to your account</h5>
                 <p id="msg1"></p>
                 <form id="loginForm">
-                    <input type="email" name="email" class="form-control-sm" placeholder="email..">
-                    <input type="password" name="password" class="form-control-sm" placeholder="password..">
+                    <input type="email" name="email" class="form-control-sm" placeholder="email.." required="required">
+                    <input type="password" name="password" class="form-control-sm" placeholder="password.." required="required">
 
                     <button id="loginSubmit" type="submit" class="btn btn-primary btn-sm" style="margin-top: 5px">Login</button>
                 </form>
@@ -48,10 +48,10 @@
                 <h5>Create a new account</h5>
                 <p id="msg"></p>
                 <form id="signupForm">
-                    <input type="text" name="name" class="form-control-sm" placeholder="name..">
-                    <input type="email" name="email" class="form-control-sm" placeholder="email..">
-                    <input type="password" name="password" class="form-control-sm" placeholder="password..">
-                    <input type="password" name="repeat_password" class="form-control-sm"placeholder="Repeat-password..">
+                    <input type="text" name="name" class="form-control-sm" placeholder="name.." required="required">
+                    <input type="email" name="email" class="form-control-sm" placeholder="email.." required="required">
+                    <input type="password" name="password" class="form-control-sm" placeholder="password.." required="required">
+                    <input type="password" name="repeat_password" class="form-control-sm"placeholder="Repeat-password.." required="required">
                     <button id="signupSubmit" type="submit" class="btn btn-primary btn-sm" style="margin-top: 5px">Signup</button>
 
                 </form>     

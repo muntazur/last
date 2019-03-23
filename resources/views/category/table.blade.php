@@ -26,7 +26,6 @@
 <table class="table table-striped table-bordered table-condensed table-dark">
 	<thead>
 		<th>Category</th>
-		<th>Parent Category</th>
 		<th>Status</th>
 		<th>Action</th>
 	</thead>
@@ -35,7 +34,6 @@
 		    <tr>
 			
 				<td>{{$row->name}}</td>
-				<td>{{$row->parent_category}}</td>
 
 				@if($row->status==1)
 				  <td>
@@ -51,11 +49,10 @@
 					<ul>
 						<li>
 							<button id="category" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#editModal" data-id="{{$row->name}}">
-							<input type="hidden" name="parent" id="parent"
-							value="{{$row->parent_category}}">Edit
+							Edit
 							</button>
 
-							<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" data-id="{{$row->name}}">Delete</button>
+							<button type="button" id="deleteCategory" class="btn btn-danger btn-sm" data-id="{{$row->name}}">Delete</button>
 						</li>
 					</ul>
 				</td>
@@ -70,7 +67,7 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header" align="center">
-				<h4 class="modal-title">Update brand</h4>
+				<h4 class="modal-title">Update Category</h4>
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 			</div>
 			<div class="modal-body" align="center">
@@ -79,7 +76,6 @@
 
 				<p id="msg"></p>
 				<input type="text" name="category" value="" class="form-control" style="width:80%;text-align: center;" placeholder="">
-				<input type="text" name='parent' value="" class="form-control" style="width:80%;text-align: center;" placeholder="">
 
 				<input type="hidden" name="previous" value="">
 				<button type="submit" class="btn btn-info btn-sm">update</button>
@@ -95,26 +91,6 @@
 	</div>
 </div>
 
-
-
-<div class="modal fade" id="deleteModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<div class="modal-body">
-				<form id="deleteForm">
-				<input type="text" name="brand" readonly="readonly" value="">
-				<button type="submit">delete</button>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" data-dismiss="modal">close</button>
-			</div>
-		</div>
-	</div>
-</div>
 
 </div>
 @endsection
@@ -133,17 +109,14 @@
 	        }
 
 	    });
-	$("#category").click(function(){
-		var value = $(this).find("#parent").val();
-		console.log(value);
-	});
 
 	$("#editModal").on('show.bs.modal',function(e) {
 		var category = $(e.relatedTarget).data('id');
 
 		var modal=$(this);
 		modal.find('.modal-body input[name=category]').val(category);
-		//modal.find('.modal-body input[name=previous]').val(brand);
+		modal.find('.modal-body input[name=previous]').val(category);
+		
 	});
 
 	$("#editForm").on('submit',function(e)
@@ -154,7 +127,7 @@
 
 		$.ajax({
 			type:'POST',
-			url:'/update_brand',
+			url:'/update_category',
 			data:data,
 			success:function(result)
 			{
@@ -175,24 +148,18 @@
 		});
 	});
     
-    $("#deleteModal").on('show.bs.modal',function(e)
-    {   
-    	var brand = $(e.relatedTarget).data('id');
-    	var modal=$(this);
 
-    	modal.find('.modal-body input[name=brand]').val(brand);
-    });
 
-	$("#deleteForm").on('submit',function(e)
+	$("#deleteCategory").on('click',function(e)
 	{   
 		e.preventDefault()
-		var data=$(this).serialize();
-        console.log(data);
+		var category=$(this).data('id');
+        console.log(category);
 
     	$.ajax({
 				type:'POST',
-				url:'/delete_brand',
-				data:data,
+				url:'/delete_category',
+				data:{category:category},
 				success:function(result)
 				{
 					if(result.msg)

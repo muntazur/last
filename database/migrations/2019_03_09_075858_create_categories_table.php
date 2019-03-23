@@ -17,7 +17,6 @@ class CreateCategoriesTable extends Migration
           
             $table->increments('cid');
             $table->string('name')->unique();       
-            $table->string('parent_category')->nullable();
             $table->enum('status',['0','1']);
             $table->timestamps();       
 

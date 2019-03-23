@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Fpdf;
 use App\Category;
 use App\Brand;
 use App\Product;
 use App\User;
+use App\Order;
 use Session;
+require('pdf/fpdf.php');
 
 
 class InventoryController extends Controller
@@ -62,7 +65,6 @@ class InventoryController extends Controller
     			[
 
     				'name'=>$request->category,
-    				'parent_category'=>$request->parent,
     				'status'=>'1'
     		    ]
     	    );
@@ -96,8 +98,7 @@ class InventoryController extends Controller
     {   
     	$product = new Product;
         
-        $user_id = Session::get('user'); 
-    	$exists = DB::table('products')->where(['user_id'=>$user_id,'name'=>$request->product])->first();
+    	$exists = DB::table('products')->where(['name'=>$request->product])->first();
 
     	if($exists)
     	{
@@ -105,13 +106,11 @@ class InventoryController extends Controller
     	}
     	else
     	{ 
-            $user_id = Session::get('user');
     		$product::create(
 
     			[
 
     				'name'=>$request->product,
-                    'user_id'=> $user_id,
     				'category'=>$request->category,
     				'brand'=>$request->brand,
     				'price'=>$request->price,
@@ -128,7 +127,7 @@ class InventoryController extends Controller
     public function manageProduct()
     {   
         $user_id = Session::get('user');
-    	$products = DB::table('products')->where('user_id',$user_id)->get();
+    	$products = DB::table('products')->get();
 
     	return view('product.table',['table'=>$products]);
     }
@@ -142,7 +141,121 @@ class InventoryController extends Controller
     public static function getProduct()
     {   
         $user_id = Session::get('user');
-        return DB::table('products')->where('user_id',$user_id)->get();
+        return DB::table('products')->get();
+    }
+    public function getSingleProduct(Request $request)
+    {
+
+        
+        $product = DB::table('products')->where(['name'=>$request->name])->first();
+        return response()->json(
+            [
+
+                'quantity'=>$product->quantity,
+                'price' => $product->price
+            ]
+        );
+    }
+    public function saveOrder(Request $request)
+    {    
+        $order = new Order;
+        $update = $request->total_quantity - $request->quantity;
+        DB::table('products')->where(['name'=>$request->name])->update(['quantity'=>$update]);
+        Session::put('customer',$request->customer);
+        Session::put('date',$request->date);
+
+        $order::create(
+
+            [
+                'item'=>$request->name,
+                'price'=>$request->price,
+                'quantity'=>$request->quantity,
+                'total'=>$request->total_cost
+            ]
+        );
+        return response()->json(['msg'=>$request->customer]);
+    }
+
+    public function updateBrand(Request $request)
+    {
+        
+
+        DB::table('brands')->where(['name'=>$request->previous])->update(['name'=>$request->brand]);
+        
+        return response()->json(['msg'=>'updated']);
+        
+    }
+    public function deleteBrand(Request $request)
+    {
+        DB::table('brands')->where('name',$request->brand)->delete();
+        return response()->json(['msg'=>'deleted']);
+    }
+    public function updateCategory(Request $request)
+    {
+        DB::table('categories')->where(['name'=>$request->previous])->update(['name'=>$request->category]);
+        return response()->json(['msg'=>'updated']);
+    }
+    public function deleteCategory(Request $request)
+    {
+
+        DB::table('categories')->where('name',$request->category)->delete();
+        return response()->json(['msg'=>'deleted']);
+    }
+    public function printInvoice()
+    {   
+        $customer = Session::get('customer');
+        $date = Session::get('date');
+        $net_total = 0;
+
+        $pdf = new FPDF();
+        $pdf::AddPage();
+
+
+        $pdf::SetFont('Arial','B',16);
+        $pdf::Ln();
+        $pdf::Ln();
+
+
+        $pdf::Cell(70,10,'Customer Name: '.$customer);
+        //$pdf::Cell(40,10,$customer);
+        $pdf::Ln();
+
+        $pdf::Cell(70,10,'Date: '.$date);
+        //$pdf::Cell(40,10,$date);
+        $pdf::Ln();
+        $pdf::Ln();
+
+        $pdf::Cell(60,10,'Product',1,0,'C');
+        $pdf::Cell(40,10,'Price(TK.)',1,0,'C');
+        $pdf::Cell(40,10,'Quantity',1,0,'C');
+        $pdf::Cell(50,10,'Total(TK.)',1,0,'C');
+        $pdf::Ln();
+        $table = DB::table('orders')->get();
+        
+
+        foreach ($table as $row) {
+            
+            $pdf::Cell(60,10,$row->item,1,0,'C');
+            $pdf::Cell(40,10,$row->price,1,0,'C');
+            $pdf::Cell(40,10,$row->quantity,1,0,'C');
+            $pdf::Cell(50,10,$row->total,1,0,'C');
+            $pdf::Ln();
+            $net_total += $row->total;
+        }
+
+        $pdf::Ln();
+        $pdf::Ln();
+        $pdf::Cell(70,10,'Total: '.$net_total.' TK.');
+        $pdf::Cell(70,10,'Signature............');
+
+        $pdf::Output(); 
+
+        Session::put('customer',null);
+        Session::put('date',null);
+        DB::table('orders')->delete();
+
+        exit;     
+        //return response()->json(['msg'=>'hello']);
     }
 
 }

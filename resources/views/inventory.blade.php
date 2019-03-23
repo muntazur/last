@@ -13,7 +13,7 @@
                 <li class="nav-item active">
                 	
 				      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-				        {{$user->name}}
+				        
 				      </a>
 				      <div class="dropdown-menu">
 				        <a class="dropdown-item" href="logout">Logout</a>
@@ -52,21 +52,14 @@
 
 			<form id="categoryForm">
 				<input type="text" name="category" placeholder="Enter category name" class="form-control" style="width:100%">
-				<select name="parent" class="form-control" style="width:100%">
-					<option value="">none</option>
 
 					<?php 
 						use App\Http\Controllers\InventoryController;
 								$table = InventoryController::getCategoryList();
 					?>
-					@foreach($table as $row)
-
-						<option value="{{$row->name}}">{{$row->name}}</option>
-
-					@endforeach
 
 
-				</select>
+			
 				<button id="submitCategory" type="submit" class="btn btn-primary btn-sm">Add</button>
 
 			</form>	
@@ -112,7 +105,7 @@
 					<input type="text" name="price" placeholder="Enter price" class="form-control" style="width:100%">
 
 					<input type="text" name="quantity" placeholder="Enter quantity" class="form-control" style="width:100%">	
-					<button id="submitProduct"type="submit" class="btn btn-primary btn-sm">Add</button>
+					<button id="submitProduct" type="submit" class="btn btn-primary btn-sm">Add</button>
 
 			</form>	
 			<a href="manage_product" class="btn btn-info btn-sm">Manage</a>	
@@ -123,7 +116,8 @@
 	<div class="row" style="margin-top: 15px;">
 		<div class="col brand pad">
 			<h5>Make an order </h5>
-			<span><input type="text" name="name" placeholder="Enter customer name"><input type="date" name="date"></span>
+			<form id="orderForm">
+			<span><input type="text" name="customer" placeholder="Enter customer name" required="required"><input type="date" name="date" required="required"></span>
 			<br>
 			<br>
 
@@ -141,9 +135,19 @@
 				</tbody>
 			</table>
              
-             <span><button id="order" class="btn btn-primary">Add</button><button class="btn btn-danger">Remove</button></span>
+             <span><button id="order" class="btn btn-primary">New</button>
+             <button type="submit" class="btn btn-success">Submit</button></span>
+
+            </form>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-md-4 brand pad"></div>
+		<div class="col-md-4 brand pad">
+			<!--button type="button" id="print" class="btn btn-primary btn-sm">print</button -->
+			<a class="btn btn-danger" href="/print">print</a>
+		</div>
+		<div class="col-md-4 brand pad"></div>
 </div>
 @endsection
 
@@ -291,5 +295,40 @@
 	    		}
 	    	});
 	    });
+	    $("#orderForm").on('submit',function(e){
+	    	e.preventDefault();
+	    	var data = $(this).serialize();
+
+	    	$.ajax({
+	    		type:'POST',
+	    		url:'/save_order',
+	    		data:data,
+	    		success:function(result)
+	    		{
+	    			alert('created');
+	    		},
+	    		error:function()
+	    		{
+	    			alert('error');
+	    		}
+	    	});
+	    });
+
+	    /*$("#print").on('click',function(e){
+	    	e.preventDefault();
+
+	    	$.ajax({
+	    		type:'GET',
+	    		url:'/print',
+	    		success:function(result)
+	    		{
+	    			alert('ok');
+	    		},
+	    		error:function()
+	    		{
+	    			alert('Error in printing');
+	    		}
+	    	})
+	    });*/
 </script>
 @endsection
