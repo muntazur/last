@@ -257,5 +257,42 @@ class InventoryController extends Controller
         exit;     
         //return response()->json(['msg'=>'hello']);
     }
+    public function deleteProduct(Request $request)
+    {
+        DB::table('products')->where('name',$request->product)->delete();
+        return response()->json(['msg'=>'deleted']);
+    }
+    public function getOneProduct(Request $request)
+    {
+        $product = DB::table('products')->where('name',$request->product)->first();
+        return response()->json(
+            [
+                'category'=>$product->category,
+                'brand'=>$product->brand,
+                'price'=>$product->price,
+                'quantity'=>$product->quantity
+            ]
+        );
+    }
+    public function updateProduct(Request $request)
+    {
+        $result = DB::table('products')->where('name',$request->previous)->update(
+                [
+                    'name'=>$request->product,
+                    'price'=>$request->price,
+                    'quantity'=>$request->quantity
+
+                ]
+            );
+        if($result)
+        {
+            return response()->json(['msg'=>'updated']);
+        }
+        else
+        {
+            return response()->json(['msg'=>'updation failed']);
+        }
+    }
+
 
 }

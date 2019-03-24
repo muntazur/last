@@ -5,15 +5,10 @@
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
 
                    <!Navbar Brand>
-            <a class="navbar-brand" href="/">Inventory</a>
+            <a class="navbar-brand" href="/">Inventory Management System</a>
 
                   <!links>
-            <ul class="navbar-nav">
-
-                <li class="nav-item active"><a href=""class="nav-link">Home</a></li>
-                
-
-            </ul>
+           
 
         </nav>
 @endsection

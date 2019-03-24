@@ -35,3 +35,9 @@ Route::post('update_category','InventoryController@updateCategory');
 Route::post('delete_category','InventoryController@deleteCategory');
 
 Route::get('print','InventoryController@printInvoice');
+
+
+Route::post('update_product','InventoryController@updateProduct');
+Route::post('delete_product','InventoryController@deleteProduct');
+
+Route::post('get_one_product','InventoryController@getOneProduct');

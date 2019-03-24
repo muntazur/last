@@ -6,7 +6,7 @@
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 
                    <!Navbar Brand>
-            <a class="navbar-brand" href="/">Inventory</a>
+            <a class="navbar-brand" href="/">Inventory Management System</a>
 
                   <!links>
             <ul class="navbar-nav">
@@ -50,7 +50,7 @@
 
 							<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#editModal" data-id="{{$row->name}}">Edit</button>
 
-							<button type="button" id="deleteBrand" class="btn btn-danger btn-sm" data-id="{{$row->name}}">Delete</button>
+							<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" data-id="{{$row->name}}">Delete</button>
 
 						</li>
 												
@@ -91,6 +91,34 @@
 	</div>
 </div>
 
+
+<div class="modal fade" id="deleteModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header" align="center">
+				<h4 class="modal-title">Delete Brand</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body" align="center">
+
+			 <form id="deleteForm">
+
+				<p id="msg"></p>
+				<input type="text" name="brand" value="" class="form-control" style="width:80%;text-align: center;" placeholder="" readonly="readonly">
+				
+				<button id="deleteBrand" type="submit" class="btn btn-info btn-sm">Delete</button>
+
+			</form>
+
+			</div>
+			<div class="modal-footer" align="center">
+
+				<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 </div>
 @endsection
 
@@ -114,6 +142,14 @@
 		var modal=$(this);
 		modal.find('.modal-body input[name=brand]').val(brand);
 		modal.find('.modal-body input[name=previous]').val(brand);
+	});
+
+	$("#deleteModal").on('show.bs.modal',function(e) {
+		var brand = $(e.relatedTarget).data('id');
+
+		var modal=$(this);
+		modal.find('.modal-body input[name=brand]').val(brand);
+		
 	});
 
 	$("#editForm").on('submit',function(e)
@@ -146,21 +182,22 @@
 	});
     
 
-	$("#deleteBrand").on('click',function(e)
+	$("#deleteForm").on('submit',function(e)
 	{   
 		e.preventDefault()
-		var brand = $(this).data('id');
-        console.log(brand);
+		var data = $(this).serialize();
+        //console.log(brand);
        
 	    	$.ajax({
 					type:'POST',
 					url:'/delete_brand',
-					data:{brand:brand},
+					data:data,
 					success:function(result)
 					{
 						if(result.msg)
-						{
-							alert('Deleted');
+						{   
+							$("#msg").html(result.msg);
+							//alert('Deleted');
 							setTimeout(function() {
 								// body...
 								window.location.reload();

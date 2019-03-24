@@ -5,7 +5,7 @@
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
 
                    <!Navbar Brand>
-            <a class="navbar-brand" href="/">Inventory</a>
+            <a class="navbar-brand" href="/">Inventory Management System</a>
 
                   <!links>
             <ul class="navbar-nav">
@@ -33,7 +33,7 @@
 	<div class="row" style="margin-top: 10px">
 
 		<div class="col-sm-4 brand pad">
-            <h5> Add a new brand </h5>
+            <h5 style="color:white"> Add a new brand </h5>
             <p id="msgBrand"></p>
 			<form id="brandForm">
 	            
@@ -47,7 +47,7 @@
 
 		<div class="col-sm-4 brand pad">
 
-			<h5>Add a new category</h5>
+			<h5 style="color:white">Add a new category</h5>
 			<p id="msgCategory"></p>
 
 			<form id="categoryForm">
@@ -69,7 +69,7 @@
 
 		<div class="col-sm-4 brand pad">
 			
-			<h5> Add a new product </h5>
+			<h5 style="color:white"> Add a new product </h5>
 			<p id="msgProduct"></p>
 
 			<form id="productForm">
@@ -115,7 +115,7 @@
 
 	<div class="row" style="margin-top: 15px;">
 		<div class="col brand pad">
-			<h5>Make an order </h5>
+			<h5 style="color:white">Make an order </h5>
 			<form id="orderForm">
 			<span><input type="text" name="customer" placeholder="Enter customer name" required="required"><input type="date" name="date" required="required"></span>
 			<br>
